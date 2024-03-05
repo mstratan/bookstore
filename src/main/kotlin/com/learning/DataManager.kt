@@ -1,6 +1,12 @@
 package com.learning
 
+import org.slf4j.LoggerFactory
+import kotlin.reflect.full.declaredMemberProperties
+
 object DataManager {
+
+    val log = LoggerFactory.getLogger(DataManager::class.java)
+
     val books = ArrayList<Book>()
     fun gimmeId(): String {
         return books.size.toString()
@@ -45,5 +51,18 @@ object DataManager {
         }
         books.remove(foundBook)
         return foundBook!!
+    }
+
+    fun sortedBooks(sortBy: String, asc: Boolean): List<Book> {
+        val member = Book::class.declaredMemberProperties.find { it.name.equals(sortBy) }
+        if (member == null) {
+            log.info("The field to sort by does not exist")
+            return books
+        }
+        if (asc)
+            return  books.sortedBy {  member?.get(it).toString() }
+        else
+            return books.sortedByDescending { member?.get(it).toString()
+        }
     }
 }

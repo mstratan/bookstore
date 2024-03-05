@@ -2,12 +2,21 @@ package com.learning
 
 import io.ktor.http.*
 import io.ktor.server.application.*
+import io.ktor.server.locations.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 
+@Location("/book/list")
+data class BookListLocation(val sortBy: String, val asc: Boolean)
+
 fun Route.books() {
     val dataManager = DataManager
+
+    get<BookListLocation>() {
+        call.respond(dataManager.sortedBooks(it.sortBy, it.asc))
+    }
+
     route("/book") {
         get {
             call.respond(dataManager.books)
