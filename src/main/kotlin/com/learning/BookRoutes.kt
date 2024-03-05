@@ -2,6 +2,7 @@ package com.learning
 
 import io.ktor.http.*
 import io.ktor.server.application.*
+import io.ktor.server.auth.*
 import io.ktor.server.locations.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
@@ -13,8 +14,10 @@ data class BookListLocation(val sortBy: String, val asc: Boolean)
 fun Route.books() {
     val dataManager = DataManager
 
-    get<BookListLocation>() {
-        call.respond(dataManager.sortedBooks(it.sortBy, it.asc))
+    authenticate("bookStoreAuth") {
+        get<BookListLocation>() {
+            call.respond(dataManager.sortedBooks(it.sortBy, it.asc))
+        }
     }
 
     route("/book") {
