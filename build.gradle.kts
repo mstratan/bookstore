@@ -26,6 +26,7 @@ dependencies {
     implementation("io.ktor:ktor-server-core-jvm")
     implementation("io.ktor:ktor-server-html-builder-jvm")
     implementation("io.ktor:ktor-server-locations")
+    implementation("org.mongodb:mongodb-driver:3.12.3")
     implementation("org.jetbrains.kotlinx:kotlinx-html:0.10.1")
     implementation("org.jetbrains:kotlin-css-jvm:1.0.0-pre.129-kotlin-1.4.20")
     implementation("io.ktor:ktor-server-host-common-jvm")

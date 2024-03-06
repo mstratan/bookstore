@@ -12,7 +12,7 @@ import io.ktor.server.routing.*
 data class BookListLocation(val sortBy: String, val asc: Boolean)
 
 fun Route.books() {
-    val dataManager = DataManager
+    val dataManager = DataManagerMongoDB
 
     authenticate("bookStoreAuth") {
         get<BookListLocation>() {
@@ -22,7 +22,7 @@ fun Route.books() {
 
     route("/book") {
         get {
-            call.respond(dataManager.books)
+            call.respond(dataManager.allBooks())
         }
         post("/{id}") {
             val id = call.parameters.get("id")
@@ -32,12 +32,12 @@ fun Route.books() {
         }
         put {
             val book = call.receive(Book::class)
-            val newBook = DataManager.newBook(book)
+            val newBook = dataManager.newBook(book)
             call.respond(newBook)
         }
         delete("/{id}") {
             val id = call.parameters.get("id").toString()
-            val deletedBook = DataManager.deleteBook(id)
+            val deletedBook = dataManager.deleteBook(id)
             call.respond(deletedBook)
         }
     }
