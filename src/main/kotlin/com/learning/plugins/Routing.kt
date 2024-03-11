@@ -1,6 +1,7 @@
 package com.learning.plugins
 
 import com.learning.books
+import com.learning.ui.login.loginView
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.http.content.*
@@ -16,6 +17,7 @@ fun Application.configureRouting() {
     }
     routing {
         books()
+        loginView()
         get("/") {
             call.respondText("Hello World!")
         }
