@@ -1,9 +1,9 @@
-package com.learning
+package com.learning.ui.books
 
+import com.learning.model.Book
+import com.learning.model.DataManagerMongoDB
 import com.learning.ui.Endpoints
-import com.learning.ui.books.BookTemplate
 import com.learning.ui.login.Session
-import io.ktor.http.*
 import io.ktor.http.content.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
@@ -13,7 +13,6 @@ import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.server.sessions.*
-import kotlinx.css.i
 import kotlinx.html.i
 import org.slf4j.LoggerFactory
 

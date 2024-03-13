@@ -1,13 +1,12 @@
 package com.learning.ui.books
 
 
-import com.learning.Book
+import com.learning.model.Book
 import com.learning.GeneralViewTemplate
 import com.learning.ui.Endpoints
 import com.learning.ui.login.Session
 
 import io.ktor.server.html.*
-import kotlinx.css.div
 import kotlinx.html.*
 
 class BookTemplate(session: Session?, private val books: List<Book>) : Template<HTML> {
@@ -61,9 +60,18 @@ class BookTemplate(session: Session?, private val books: List<Book>) : Template<
                                     td { +"${it.title}" }
                                     td { +"${it.author}" }
                                     td { +"${it.price}" }
-                                    td {
-                                        button(classes = "btn btn-success", type = ButtonType.submit) {
-                                            +"Add to cart"
+                                    td{
+                                        form(
+                                            method = FormMethod.post,
+                                            encType = FormEncType.multipartFormData,
+                                            action = Endpoints.DOADDTOCART.url
+                                        ) {
+                                            button(classes = "btn btn-success", type = ButtonType.submit) {
+                                                +"Add to cart"
+                                            }
+                                            input(type = InputType.hidden, name = "bookid") {
+                                                value = "${it.id}"
+                                            }
                                         }
                                     }
                                 }

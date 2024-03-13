@@ -1,10 +1,12 @@
-package com.learning
+package com.learning.model
 
+import com.learning.ui.login.Session
 import com.mongodb.MongoClientSettings
 import com.mongodb.client.MongoClients
 import com.mongodb.client.MongoCollection
 import com.mongodb.client.MongoDatabase
 import com.mongodb.client.model.Filters.*
+import org.bson.BsonDocument
 import org.bson.Document
 import org.bson.codecs.configuration.CodecRegistries.fromProviders
 import org.bson.codecs.configuration.CodecRegistries.fromRegistries
@@ -18,6 +20,7 @@ object DataManagerMongoDB {
     val log = LoggerFactory.getLogger(DataManagerMongoDB::class.java)
     val database: MongoDatabase
     val bookCollection: MongoCollection<Book>
+    val cartCollection: MongoCollection<Cart>
 
     init {
         val pojoCodecRegistry: CodecRegistry = fromProviders(PojoCodecProvider.builder().automatic(true).build())
@@ -33,10 +36,13 @@ object DataManagerMongoDB {
         val mongoClient = MongoClients.create(clientSettings)
         database = mongoClient.getDatabase("development")
         bookCollection = database.getCollection(Book::class.java.simpleName, Book::class.java)
+        cartCollection = database.getCollection(Cart::class.java.simpleName, Cart::class.java)
         initBooks()
     }
 
     fun initBooks() {
+        bookCollection.deleteMany(BsonDocument())
+        cartCollection.deleteMany(BsonDocument())
         bookCollection.insertOne(Book(null, "How to grow apples", "Mr. Appleton", 100f))
         bookCollection.insertOne(Book(null, "How to grow oranges", "Mr. Orangeton", 90f))
         bookCollection.insertOne(Book(null, "How to grow lemons", "Mr. Lemon", 110f))
@@ -91,5 +97,42 @@ object DataManagerMongoDB {
             )
             .sort(Document(mapOf(Pair("title", 1), Pair("_id", -1))))
             .toList()
+    }
+
+    fun updateCart(cart:Cart){
+        val replaceOne = cartCollection.replaceOne(eq("username", cart.username), cart)
+        log.info("Update result: $replaceOne")
+    }
+
+    fun addBook(session: Session?, book: Book){
+        val cartForUser = cartForUser(session)
+        cartForUser.addBook(book)
+        updateCart(cartForUser)
+    }
+
+    fun cartForUser(session: Session?): Cart{
+        if (session == null)
+            throw IllegalArgumentException("Session is null")
+        val find = cartCollection.find(eq("username", session.username))
+
+
+        if (find.count() == 0){
+            val cart = Cart(username=session.username)
+            cartCollection.insertOne(cart)
+            return cart
+        }
+        else
+            return find.first()
+    }
+
+    fun getBookWithId(bookid: String): Book {
+        log.info("Get book with id: $bookid")
+        return bookCollection.find(eq("_id", ObjectId(bookid))).first()
+    }
+
+    fun removeBook(session: Session?, book: Book) {
+        val cartForUser = cartForUser(session)
+        cartForUser.removeBook(book)
+        updateCart(cartForUser)
     }
 }

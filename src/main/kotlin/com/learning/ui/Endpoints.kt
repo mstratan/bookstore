@@ -7,5 +7,8 @@ enum class Endpoints(val url: String) {
     HOME("/html/home"),
     BOOKS("/html/books"),
     CART("/html/cart"),
-    DOBOOKSEARCH("/html/books/search")
+    DOBOOKSEARCH("/html/books/search"),
+    DOADDTOCART("/html/cart/add"),
+    DOREMOVEFROMCART("/html/cart/remove"),
+    CHECKOUT("/html/checkout")
 }

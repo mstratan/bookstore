@@ -1,19 +1,12 @@
 package com.learning
 
+import com.learning.model.DataManagerMongoDB
+import com.learning.ui.Endpoints
+import com.learning.ui.login.Session
 import io.ktor.server.html.*
-import kotlinx.html.ButtonType
-import kotlinx.html.FlowContent
-import kotlinx.html.UL
-import kotlinx.html.a
-import kotlinx.html.button
-import kotlinx.html.div
-import kotlinx.html.id
-import kotlinx.html.li
-import kotlinx.html.nav
-import kotlinx.html.span
-import kotlinx.html.ul
+import kotlinx.html.*
 
-class NavigationTemplate() : Template<FlowContent> {
+class NavigationTemplate(val session: Session?) : Template<FlowContent> {
     val menuitems = PlaceholderList<UL, FlowContent>()
 
     override fun FlowContent.apply() {
@@ -37,6 +30,16 @@ class NavigationTemplate() : Template<FlowContent> {
                         each(menuitems) {
                             li {
                                 insert(it)
+                            }
+                        }
+                    }
+                }
+                div(classes=""){
+                    if (session != null){
+                        val cartForUser = DataManagerMongoDB.cartForUser(session)
+                        form (action=Endpoints.CART.url){
+                            button(classes="btn btn-danger", type=ButtonType.submit){
+                                +"Items in cart: ${cartForUser?.qtyTotal}, total price: ${cartForUser?.sum}"
                             }
                         }
                     }

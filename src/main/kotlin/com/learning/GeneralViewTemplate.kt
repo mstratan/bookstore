@@ -26,7 +26,7 @@ class GeneralViewTemplate(val session: Session?) : Template<HTML> {
         }
 
         body {
-            insert(NavigationTemplate()) {
+            insert(NavigationTemplate(session)) {
                 menuitems {
                     a(classes = "nav-link", href = Endpoints.HOME.url) { +"Home" }
                 }
