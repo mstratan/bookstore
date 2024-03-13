@@ -10,5 +10,6 @@ enum class Endpoints(val url: String) {
     DOBOOKSEARCH("/html/books/search"),
     DOADDTOCART("/html/cart/add"),
     DOREMOVEFROMCART("/html/cart/remove"),
-    CHECKOUT("/html/checkout")
+    CHECKOUT("/html/checkout"),
+    RECEIPT("/html/checkout")
 }

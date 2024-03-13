@@ -91,12 +91,12 @@ class CartTemplate(val session: Session?, val cart: Cart) : Template<HTML> {
                 }
                 div(classes = "row mt-3") {
                     form(
-                        method = FormMethod.post,
+                        method = FormMethod.get,
                         encType = FormEncType.multipartFormData,
-                        action = Endpoints.CHECKOUT.url
+                        action = Endpoints.RECEIPT.url
                     ) {
                         button(classes = "btn btn-warning", type = ButtonType.submit) {
-                            +"Checkout and pay"
+                            +"Pay and get a receipt"
                         }
                     }
                 }
