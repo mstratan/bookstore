@@ -4,7 +4,7 @@ import com.mongodb.MongoClientSettings
 import com.mongodb.client.MongoClients
 import com.mongodb.client.MongoCollection
 import com.mongodb.client.MongoDatabase
-import com.mongodb.client.model.Filters.eq
+import com.mongodb.client.model.Filters.*
 import org.bson.Document
 import org.bson.codecs.configuration.CodecRegistries.fromProviders
 import org.bson.codecs.configuration.CodecRegistries.fromRegistries
@@ -78,6 +78,18 @@ object DataManagerMongoDB {
             .sort(Document(mapOf(Pair(sortBy, ascint), Pair("_id", -1))))
             .skip(pageno - 1)
             .limit(pageSize)
+            .toList()
+    }
+
+    fun searchBooks(str: String): List<Book> {
+        return bookCollection
+            .find(
+                or(
+                    regex("title", ".*$str.*"),
+                    regex("author", ".*$str.*")
+                )
+            )
+            .sort(Document(mapOf(Pair("title", 1), Pair("_id", -1))))
             .toList()
     }
 }

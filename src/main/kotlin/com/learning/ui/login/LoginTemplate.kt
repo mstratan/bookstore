@@ -5,7 +5,9 @@ import com.learning.ui.Endpoints
 import io.ktor.server.html.*
 import kotlinx.html.*
 
-class LoginTemplate(val basicTemplate: GeneralViewTemplate = GeneralViewTemplate()) : Template<HTML> {
+class LoginTemplate(val session: Session?) : Template<HTML> {
+
+    val basicTemplate: GeneralViewTemplate = GeneralViewTemplate(session)
     val greeting = Placeholder<FlowContent>()
     override fun HTML.apply() {
         insert(basicTemplate) {

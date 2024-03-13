@@ -8,7 +8,8 @@ import kotlinx.html.a
 import kotlinx.html.div
 import kotlinx.html.h2
 
-class LogoutTemplate(val basicTemplate: GeneralViewTemplate = GeneralViewTemplate()) : Template<HTML> {
+class LogoutTemplate(val session: Session?) : Template<HTML> {
+    val basicTemplate: GeneralViewTemplate = GeneralViewTemplate(session)
     override fun HTML.apply() {
         insert(basicTemplate) {
             menu {

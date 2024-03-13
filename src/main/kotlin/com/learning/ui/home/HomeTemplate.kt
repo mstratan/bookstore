@@ -2,12 +2,14 @@ package com.learning.ui.home
 
 import com.learning.GeneralViewTemplate
 import com.learning.ui.Endpoints
+import com.learning.ui.login.Session
 import io.ktor.server.html.*
 import kotlinx.html.*
 
 
-class HomeTemplate(val basicTemplate: GeneralViewTemplate = GeneralViewTemplate()) : Template<HTML> {
+class HomeTemplate(val session: Session?) : Template<HTML> {
 
+    val basicTemplate: GeneralViewTemplate = GeneralViewTemplate(session)
     override fun HTML.apply() {
         insert(basicTemplate) {
             menu {

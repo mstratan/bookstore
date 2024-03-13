@@ -17,18 +17,18 @@ data class Session(val username: String)
 
 fun Route.loginView() {
     get(Endpoints.LOGIN.url) {
-        call.respondHtmlTemplate(LoginTemplate()) {
+        call.respondHtmlTemplate(LoginTemplate(call.sessions.get<Session>())) {
 
         }
     }
     get(Endpoints.HOME.url) {
-        call.respondHtmlTemplate(HomeTemplate()) {
+        call.respondHtmlTemplate(HomeTemplate(call.sessions.get<Session>())) {
 
         }
     }
     get(Endpoints.LOGOUT.url) {
         call.sessions.clear(Constants.COOKIE_NAME.value)
-        call.respondHtmlTemplate(LogoutTemplate()) {
+        call.respondHtmlTemplate(LogoutTemplate(call.sessions.get<Session>())) {
 
         }
     }
@@ -65,14 +65,14 @@ fun Route.loginView() {
         if(SecurityHandler().isValid(username, password)) {
             call.sessions.set(Constants.COOKIE_NAME.value, Session(username))
             call.respondHtmlTemplate(
-                LoginSuccesfulTemplate()
+                LoginSuccesfulTemplate(call.sessions.get<Session>())
             ) {
                 greeting {
                     +"You are logged in as $username and a cookie has been created"
                 }
             }
         } else {
-            call.respondHtmlTemplate(LoginTemplate()) {
+            call.respondHtmlTemplate(LoginTemplate(call.sessions.get<Session>())) {
                 greeting {
                     +"Username or password was invalid... Try again."
                 }
