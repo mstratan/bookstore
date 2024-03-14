@@ -4,3 +4,6 @@ services:
     image: mongo:latest
     ports:
       - 27017:27017
+  bookstore:
+    build: .
+    network_mode: host
